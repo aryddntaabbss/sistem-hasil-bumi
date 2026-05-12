@@ -5,11 +5,17 @@ namespace App\Filament\Widgets;
 use App\Models\Produksi;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ProduksiChart extends ChartWidget
 {
     protected static ?string $heading = 'Grafik Produksi per Bulan';
     protected static ?int $sort = 2;
+
+    public static function canView(): bool
+{
+    return Auth::check() && Auth::user()->role === 'admin';
+}
 
     protected function getData(): array
     {

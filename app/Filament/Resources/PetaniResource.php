@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class PetaniResource extends Resource
 {
@@ -17,6 +18,11 @@ class PetaniResource extends Resource
     protected static ?string $navigationLabel = 'Data Petani';
     protected static ?string $modelLabel = 'Petani';
     protected static ?int $navigationSort = 1;
+
+    public static function canAccess(): bool
+{
+    return Auth::check() && Auth::user()->role === 'admin';
+}
 
     public static function form(Form $form): Form
     {
@@ -75,7 +81,7 @@ class PetaniResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListPetanis::route('/'),
+            'index'  => Pages\ListPetani::route('/'),
             'create' => Pages\CreatePetani::route('/create'),
             'edit'   => Pages\EditPetani::route('/{record}/edit'),
         ];

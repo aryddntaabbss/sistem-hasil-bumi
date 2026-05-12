@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class KomoditasResource extends Resource
 {
@@ -17,6 +18,11 @@ class KomoditasResource extends Resource
     protected static ?string $navigationLabel = 'Data Komoditas';
     protected static ?string $modelLabel = 'Komoditas';
     protected static ?int $navigationSort = 2;
+
+    public static function canAccess(): bool
+{
+    return Auth::check() && Auth::user()->role === 'admin';
+}
 
     public static function form(Form $form): Form
     {

@@ -13,6 +13,7 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class ProduksiResource extends Resource
 {
@@ -21,6 +22,25 @@ class ProduksiResource extends Resource
     protected static ?string $navigationLabel = 'Data Produksi';
     protected static ?string $modelLabel = 'Produksi';
     protected static ?int $navigationSort = 3;
+
+    public static function canAccess(): bool
+{
+    return Auth::check() && in_array(Auth::user()->role, ['admin', 'petani']);
+}
+
+public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+{
+    $query = parent::getEloquentQuery();
+
+    if (Auth::check() && Auth::user()->role === 'petani') {
+        $petani = \App\Models\Petani::where('nama', Auth::user()->name)->first();
+        if ($petani) {
+            $query->where('petani_id', $petani->id);
+        }
+    }
+
+    return $query;
+}
 
     public static function form(Form $form): Form
     {
@@ -170,7 +190,7 @@ class ProduksiResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListProduksis::route('/'),
+            'index'  => Pages\ListProduksi::route('/'),
             'create' => Pages\CreateProduksi::route('/create'),
             'edit'   => Pages\EditProduksi::route('/{record}/edit'),
         ];

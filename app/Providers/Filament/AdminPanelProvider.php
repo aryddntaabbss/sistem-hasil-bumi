@@ -41,6 +41,7 @@ class AdminPanelProvider extends PanelProvider
                 // Widgets\FilamentInfoWidget::class,
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\ProduksiChart::class,
+                \App\Filament\Widgets\PetaniStatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,

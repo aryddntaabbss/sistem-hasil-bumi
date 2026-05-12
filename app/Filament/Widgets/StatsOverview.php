@@ -7,9 +7,15 @@ use App\Models\Komoditas;
 use App\Models\Produksi;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 
 class StatsOverview extends BaseWidget
 {
+    public static function canView(): bool
+{
+    return Auth::check() && Auth::user()->role === 'admin';
+}
+
     protected function getStats(): array
     {
         $totalPendapatan = Produksi::sum('pendapatan');

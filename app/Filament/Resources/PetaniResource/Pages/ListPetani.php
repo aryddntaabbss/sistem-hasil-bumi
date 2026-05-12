@@ -6,7 +6,7 @@ use App\Filament\Resources\PetaniResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListPetanis extends ListRecords
+class ListPetani extends ListRecords
 {
     protected static string $resource = PetaniResource::class;
 

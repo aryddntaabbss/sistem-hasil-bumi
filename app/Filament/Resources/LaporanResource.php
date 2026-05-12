@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Auth;
 
 class LaporanResource extends Resource
 {
@@ -23,6 +24,11 @@ class LaporanResource extends Resource
     protected static ?string $modelLabel = 'Laporan';
     protected static ?string $slug = 'laporan';
     protected static ?int $navigationSort = 4;
+
+    public static function canAccess(): bool
+{
+    return Auth::check() && Auth::user()->role === 'admin';
+}
 
     public static function table(Table $table): Table
     {
