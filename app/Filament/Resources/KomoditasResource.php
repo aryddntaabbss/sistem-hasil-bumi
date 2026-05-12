@@ -17,6 +17,7 @@ class KomoditasResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-tag';
     protected static ?string $navigationLabel = 'Data Komoditas';
     protected static ?string $modelLabel = 'Komoditas';
+    protected static ?string $pluralModelLabel = 'Komoditas';
     protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool

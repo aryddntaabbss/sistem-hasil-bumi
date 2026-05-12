@@ -22,6 +22,7 @@ class LaporanResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-chart-bar';
     protected static ?string $navigationLabel = 'Laporan';
     protected static ?string $modelLabel = 'Laporan';
+    protected static ?string $pluralModelLabel = 'Laporan';
     protected static ?string $slug = 'laporan';
     protected static ?int $navigationSort = 4;
 

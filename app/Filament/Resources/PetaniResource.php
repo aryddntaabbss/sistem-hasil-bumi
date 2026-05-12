@@ -17,6 +17,7 @@ class PetaniResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-users';
     protected static ?string $navigationLabel = 'Data Petani';
     protected static ?string $modelLabel = 'Petani';
+    protected static ?string $pluralModelLabel = 'Petani';
     protected static ?int $navigationSort = 1;
 
     public static function canAccess(): bool
@@ -32,16 +33,17 @@ class PetaniResource extends Resource
                 ->required()
                 ->maxLength(255),
 
-            Forms\Components\Textarea::make('alamat')
-                ->label('Alamat')
-                ->required()
-                ->rows(3),
-
             Forms\Components\TextInput::make('no_hp')
                 ->label('No. HP')
                 ->tel()
                 ->required()
                 ->maxLength(15),
+
+            Forms\Components\Textarea::make('alamat')
+                ->label('Alamat')
+                ->required()
+                ->rows(3),
+            
         ]);
     }
 
@@ -54,12 +56,12 @@ class PetaniResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('no_hp')
+                    ->label('No. HP'),
+
                 Tables\Columns\TextColumn::make('alamat')
                     ->label('Alamat')
                     ->limit(50),
-
-                Tables\Columns\TextColumn::make('no_hp')
-                    ->label('No. HP'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Dibuat')
