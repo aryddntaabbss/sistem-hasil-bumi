@@ -25,7 +25,7 @@ class StatsOverview extends BaseWidget
             Stat::make('Total Petani', Petani::count())
                 ->description('Jumlah petani terdaftar')
                 ->descriptionIcon('heroicon-o-users')
-                ->color('success'),
+                ->color('primary'),
 
             Stat::make('Total Komoditas', Komoditas::count())
                 ->description('Jenis komoditas tersedia')
@@ -40,12 +40,12 @@ class StatsOverview extends BaseWidget
             Stat::make('Total Laporan', Produksi::count())
                 ->description('Laporan panen tersedia')
                 ->descriptionIcon('heroicon-o-document-chart-bar')
-                ->color('primary'),
+                ->color('secondary'),
 
             Stat::make('Total Pendapatan', 'Rp ' . number_format($totalPendapatan, 0, ',', '.'))
                 ->description('Akumulasi seluruh pendapatan')
                 ->descriptionIcon('heroicon-o-banknotes')
-                ->color('success'),
+                ->color('secondary'),
 
             Stat::make('Total Keuntungan', 'Rp ' . number_format($totalKeuntungan, 0, ',', '.'))
                 ->description('Akumulasi seluruh keuntungan')

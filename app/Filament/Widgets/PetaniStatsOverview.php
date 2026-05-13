@@ -41,7 +41,7 @@ class PetaniStatsOverview extends BaseWidget
         Stat::make('Total Pendapatan', 'Rp ' . number_format($totalPendapatan, 0, ',', '.'))
             ->description('Akumulasi pendapatan saya')
             ->descriptionIcon('heroicon-o-banknotes')
-            ->color('success'),
+            ->color('secondary'),
 
         Stat::make('Total Keuntungan', 'Rp ' . number_format($totalKeuntungan, 0, ',', '.'))
             ->description('Akumulasi keuntungan saya')
