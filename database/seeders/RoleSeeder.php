@@ -55,7 +55,7 @@ class RoleSeeder extends Seeder
         $userPetani = User::firstOrCreate(
             ['email' => 'petani@gmail.com'],
             [
-                'name'     => 'Petani Demo',
+                'name'     => 'Petani',
                 'password' => Hash::make('password'),
             ]
         );
