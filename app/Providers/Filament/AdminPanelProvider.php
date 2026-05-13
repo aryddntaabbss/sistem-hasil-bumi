@@ -26,6 +26,26 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->brandName('SIPDHB')
+            ->renderHook(
+                'panels::auth.login.form.before',
+                fn() => new \Illuminate\Support\HtmlString('
+        <style>
+            .fi-logo { display: none !important; }
+            .fi-simple-header { display: none !important; }
+        </style>
+        <div style="text-align: center;">
+    <span style="font-size: 2.1rem; font-weight: 700; color: #16a34a;">
+        SIPDHB
+    </span>
+    <br>
+    <span style="font-size: 0.7rem; color: #6b7280;">
+        Sistem Informasi Pengolahan Data Hasil Bumi Kecamatan Gane Barat
+    </span>
+    <hr style="border: 1px solid #e5e7eb; margin-top: 0.5rem; margin-bottom: 0.5rem;">
+</div>
+    ')
+            )
             ->login()
             ->colors([
                 'primary' => Color::Green,
@@ -39,7 +59,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
-                \App\Filament\Widgets\WelcomeWidget::class, 
+                \App\Filament\Widgets\WelcomeWidget::class,
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\ProduksiChart::class,
                 \App\Filament\Widgets\PetaniProduksiChart::class,
