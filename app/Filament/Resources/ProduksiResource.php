@@ -21,6 +21,7 @@ class ProduksiResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationLabel = 'Data Produksi';
     protected static ?string $modelLabel = 'Produksi';
+    protected static ?string $slug = 'produksi';
     protected static ?string $pluralModelLabel = 'Produksi';
     protected static ?int $navigationSort = 3;
 

@@ -20,6 +20,7 @@ class PetaniResource extends Resource
     protected static ?string $navigationLabel = 'Data Petani';
     protected static ?string $modelLabel = 'Petani';
     protected static ?string $pluralModelLabel = 'Petani';
+    protected static ?string $slug = 'petani';
     protected static ?int $navigationSort = 1;
 
     public static function canAccess(): bool
