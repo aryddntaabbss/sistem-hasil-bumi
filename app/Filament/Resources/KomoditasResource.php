@@ -52,9 +52,9 @@ class KomoditasResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
-                    
+                    ->label('No')
+                    ->rowIndex(),
+
                 Tables\Columns\TextColumn::make('nama_komoditas')
                     ->label('Nama Komoditas')
                     ->searchable()

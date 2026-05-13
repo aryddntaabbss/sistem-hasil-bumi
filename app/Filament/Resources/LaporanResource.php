@@ -27,9 +27,9 @@ class LaporanResource extends Resource
     protected static ?int $navigationSort = 4;
 
     public static function canAccess(): bool
-{
-    return Auth::check() && Auth::user()->role === 'admin';
-}
+    {
+        return Auth::check() && Auth::user()->role === 'admin';
+    }
 
     public static function table(Table $table): Table
     {
@@ -37,8 +37,8 @@ class LaporanResource extends Resource
             ->query(Produksi::with(['petani', 'komoditas']))
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
+                    ->label('No')
+                    ->rowIndex(),
                 Tables\Columns\TextColumn::make('petani.nama')
                     ->label('Petani')
                     ->searchable()

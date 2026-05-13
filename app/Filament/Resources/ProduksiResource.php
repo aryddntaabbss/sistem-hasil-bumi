@@ -87,36 +87,39 @@ class ProduksiResource extends Resource
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $harga      = $get('harga_per_kg') ?? 0;
-                            $biaya      = $get('biaya_produksi') ?? 0;
-                            $pendapatan = $state * $harga;
-                            $set('pendapatan', $pendapatan);
-                            $set('keuntungan', $pendapatan - $biaya);
+                            $harga      = (float) ($get('harga_per_kg') ?? 0);
+                            $biaya      = (float) ($get('biaya_produksi') ?? 0);
+                            $pendapatan = (float) $state * $harga;
+                            $set('pendapatan', number_format($pendapatan, 0, ',', '.'));
+                            $set('keuntungan', number_format($pendapatan - $biaya, 0, ',', '.'));
                         }),
 
                     Forms\Components\TextInput::make('harga_per_kg')
                         ->label('Harga per Kg (Rp)')
+                        ->prefix('Rp')
                         ->numeric()
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $hasil      = $get('hasil_panen_kg') ?? 0;
-                            $biaya      = $get('biaya_produksi') ?? 0;
-                            $pendapatan = $hasil * $state;
-                            $set('pendapatan', $pendapatan);
-                            $set('keuntungan', $pendapatan - $biaya);
+                            $hasil      = (float) ($get('hasil_panen_kg') ?? 0);
+                            $biaya      = (float) ($get('biaya_produksi') ?? 0);
+                            $pendapatan = $hasil * (float) $state;
+                            $set('pendapatan', number_format($pendapatan, 0, ',', '.'));
+                            $set('keuntungan', number_format($pendapatan - $biaya, 0, ',', '.'));
                         }),
 
                     Forms\Components\TextInput::make('biaya_produksi')
                         ->label('Biaya Produksi (Rp)')
+                        ->prefix('Rp')
                         ->numeric()
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $hasil      = $get('hasil_panen_kg') ?? 0;
-                            $harga      = $get('harga_per_kg') ?? 0;
+                            $hasil      = (float) ($get('hasil_panen_kg') ?? 0);
+                            $harga      = (float) ($get('harga_per_kg') ?? 0);
                             $pendapatan = $hasil * $harga;
-                            $set('keuntungan', $pendapatan - $state);
+                            $set('pendapatan', number_format($pendapatan, 0, ',', '.'));
+                            $set('keuntungan', number_format($pendapatan - (float) $state, 0, ',', '.'));
                         }),
                 ])->columns(3),
 
@@ -124,16 +127,18 @@ class ProduksiResource extends Resource
                 ->description('Dihitung otomatis berdasarkan input di atas')
                 ->schema([
                     Forms\Components\TextInput::make('pendapatan')
-                        ->label('Pendapatan (Rp)')
-                        ->numeric()
+                        ->label('Pendapatan')
+                        ->prefix('Rp')
                         ->disabled()
-                        ->dehydrated(),
+                        ->dehydrated()
+                        ->formatStateUsing(fn($state) => number_format((float) $state, 0, ',', '.')),
 
                     Forms\Components\TextInput::make('keuntungan')
-                        ->label('Keuntungan (Rp)')
-                        ->numeric()
+                        ->label('Keuntungan')
+                        ->prefix('Rp')
                         ->disabled()
-                        ->dehydrated(),
+                        ->dehydrated()
+                        ->formatStateUsing(fn($state) => number_format((float) $state, 0, ',', '.')),
                 ])->columns(2),
 
             Forms\Components\Section::make('Catatan')
@@ -152,8 +157,8 @@ class ProduksiResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
+                    ->label('No')
+                    ->rowIndex(),
 
                 Tables\Columns\TextColumn::make('petani.nama')
                     ->label('Petani')

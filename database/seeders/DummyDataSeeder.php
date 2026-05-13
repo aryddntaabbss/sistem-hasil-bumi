@@ -60,51 +60,61 @@ class DummyDataSeeder extends Seeder
             ]);
         }
 
-        // Data Komoditas
+        // Data Komoditas — hanya 3
         $komoditas = [
-            ['nama_komoditas' => 'Kelapa',       'jenis' => 'Perkebunan'],
-            ['nama_komoditas' => 'Cengkeh',      'jenis' => 'Perkebunan'],
-            ['nama_komoditas' => 'Pala',         'jenis' => 'Perkebunan'],
-            ['nama_komoditas' => 'Cabai (Rica)',  'jenis' => 'Hortikultura'],
-            ['nama_komoditas' => 'Tomat',        'jenis' => 'Hortikultura'],
-            ['nama_komoditas' => 'Jagung',       'jenis' => 'Pertanian'],
-            ['nama_komoditas' => 'Sayuran',      'jenis' => 'Hortikultura'],
-            ['nama_komoditas' => 'Padi Ladang',  'jenis' => 'Pertanian'],
+            ['nama_komoditas' => 'Kelapa',  'jenis' => 'Perkebunan'],
+            ['nama_komoditas' => 'Pala',    'jenis' => 'Perkebunan'],
+            ['nama_komoditas' => 'Cengkeh', 'jenis' => 'Perkebunan'],
         ];
 
         foreach ($komoditas as $k) {
             Komoditas::create($k);
         }
 
-        // Data Produksi
+        // Data Produksi — semua pakai Kelapa, Pala, Cengkeh
         $allPetani    = Petani::all();
         $allKomoditas = Komoditas::all();
 
         $produksiData = [
-            ['petani' => 'Ahmad Basir',     'komoditas' => 'Kelapa',       'tanggal' => '2025-01-10', 'hasil' => 500,  'harga' => 3500,  'biaya' => 500000,  'catatan' => 'Panen perdana tahun ini'],
-            ['petani' => 'Ahmad Basir',     'komoditas' => 'Kelapa',       'tanggal' => '2025-03-15', 'hasil' => 620,  'harga' => 3600,  'biaya' => 550000,  'catatan' => 'Hasil meningkat'],
-            ['petani' => 'Ahmad Basir',     'komoditas' => 'Kelapa',       'tanggal' => '2025-06-20', 'hasil' => 580,  'harga' => 3700,  'biaya' => 520000,  'catatan' => null],
-            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Cengkeh',      'tanggal' => '2025-02-05', 'hasil' => 200,  'harga' => 85000, 'biaya' => 800000,  'catatan' => 'Musim cengkeh bagus'],
-            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Cengkeh',      'tanggal' => '2025-05-10', 'hasil' => 175,  'harga' => 90000, 'biaya' => 750000,  'catatan' => null],
-            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Pala',         'tanggal' => '2025-08-18', 'hasil' => 150,  'harga' => 55000, 'biaya' => 600000,  'catatan' => 'Panen pala pertama'],
-            ['petani' => 'Umar Djalil',     'komoditas' => 'Pala',         'tanggal' => '2025-01-25', 'hasil' => 300,  'harga' => 50000, 'biaya' => 700000,  'catatan' => null],
-            ['petani' => 'Umar Djalil',     'komoditas' => 'Pala',         'tanggal' => '2025-04-12', 'hasil' => 320,  'harga' => 52000, 'biaya' => 720000,  'catatan' => 'Kualitas baik'],
-            ['petani' => 'Umar Djalil',     'komoditas' => 'Jagung',       'tanggal' => '2025-07-08', 'hasil' => 800,  'harga' => 5000,  'biaya' => 400000,  'catatan' => null],
-            ['petani' => 'Fatima Soleman',  'komoditas' => 'Cabai (Rica)', 'tanggal' => '2025-02-20', 'hasil' => 100,  'harga' => 35000, 'biaya' => 300000,  'catatan' => 'Harga naik'],
-            ['petani' => 'Fatima Soleman',  'komoditas' => 'Cabai (Rica)', 'tanggal' => '2025-05-25', 'hasil' => 120,  'harga' => 40000, 'biaya' => 320000,  'catatan' => null],
-            ['petani' => 'Fatima Soleman',  'komoditas' => 'Tomat',        'tanggal' => '2025-09-14', 'hasil' => 200,  'harga' => 12000, 'biaya' => 250000,  'catatan' => null],
-            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Kelapa',       'tanggal' => '2025-03-05', 'hasil' => 450,  'harga' => 3500,  'biaya' => 480000,  'catatan' => null],
-            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Padi Ladang',  'tanggal' => '2025-06-30', 'hasil' => 1200, 'harga' => 8000,  'biaya' => 1500000, 'catatan' => 'Panen raya'],
-            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Padi Ladang',  'tanggal' => '2025-10-15', 'hasil' => 1100, 'harga' => 8500,  'biaya' => 1400000, 'catatan' => null],
-            ['petani' => 'Halima Usman',    'komoditas' => 'Sayuran',      'tanggal' => '2025-01-15', 'hasil' => 300,  'harga' => 8000,  'biaya' => 200000,  'catatan' => null],
-            ['petani' => 'Halima Usman',    'komoditas' => 'Sayuran',      'tanggal' => '2025-04-20', 'hasil' => 350,  'harga' => 9000,  'biaya' => 220000,  'catatan' => 'Permintaan tinggi'],
-            ['petani' => 'Halima Usman',    'komoditas' => 'Tomat',        'tanggal' => '2025-07-25', 'hasil' => 180,  'harga' => 13000, 'biaya' => 240000,  'catatan' => null],
-            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Cengkeh',      'tanggal' => '2025-02-28', 'hasil' => 250,  'harga' => 87000, 'biaya' => 850000,  'catatan' => null],
-            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Kelapa',       'tanggal' => '2025-05-18', 'hasil' => 520,  'harga' => 3600,  'biaya' => 510000,  'catatan' => null],
-            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Jagung',       'tanggal' => '2025-08-22', 'hasil' => 750,  'harga' => 5200,  'biaya' => 380000,  'catatan' => 'Hasil jagung bagus'],
-            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Pala',         'tanggal' => '2025-03-10', 'hasil' => 280,  'harga' => 51000, 'biaya' => 680000,  'catatan' => null],
-            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Cabai (Rica)', 'tanggal' => '2025-06-05', 'hasil' => 90,   'harga' => 38000, 'biaya' => 280000,  'catatan' => null],
-            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Sayuran',      'tanggal' => '2025-09-20', 'hasil' => 400,  'harga' => 8500,  'biaya' => 230000,  'catatan' => 'Panen sayuran melimpah'],
+            // Ahmad Basir - Kelapa
+            ['petani' => 'Ahmad Basir',     'komoditas' => 'Kelapa',  'tanggal' => '2025-01-10', 'hasil' => 500,  'harga' => 3500,  'biaya' => 500000,  'catatan' => 'Panen perdana tahun ini'],
+            ['petani' => 'Ahmad Basir',     'komoditas' => 'Kelapa',  'tanggal' => '2025-03-15', 'hasil' => 620,  'harga' => 3600,  'biaya' => 550000,  'catatan' => 'Hasil meningkat'],
+            ['petani' => 'Ahmad Basir',     'komoditas' => 'Pala',    'tanggal' => '2025-06-20', 'hasil' => 280,  'harga' => 50000, 'biaya' => 520000,  'catatan' => null],
+
+            // Siti Rahmawati - Cengkeh
+            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Cengkeh', 'tanggal' => '2025-02-05', 'hasil' => 200,  'harga' => 85000, 'biaya' => 800000,  'catatan' => 'Musim cengkeh bagus'],
+            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Cengkeh', 'tanggal' => '2025-05-10', 'hasil' => 175,  'harga' => 90000, 'biaya' => 750000,  'catatan' => null],
+            ['petani' => 'Siti Rahmawati',  'komoditas' => 'Pala',    'tanggal' => '2025-08-18', 'hasil' => 150,  'harga' => 55000, 'biaya' => 600000,  'catatan' => 'Panen pala pertama'],
+
+            // Umar Djalil - Pala
+            ['petani' => 'Umar Djalil',     'komoditas' => 'Pala',    'tanggal' => '2025-01-25', 'hasil' => 300,  'harga' => 50000, 'biaya' => 700000,  'catatan' => null],
+            ['petani' => 'Umar Djalil',     'komoditas' => 'Pala',    'tanggal' => '2025-04-12', 'hasil' => 320,  'harga' => 52000, 'biaya' => 720000,  'catatan' => 'Kualitas baik'],
+            ['petani' => 'Umar Djalil',     'komoditas' => 'Kelapa',  'tanggal' => '2025-07-08', 'hasil' => 480,  'harga' => 3600,  'biaya' => 400000,  'catatan' => null],
+
+            // Fatima Soleman - Cengkeh & Kelapa
+            ['petani' => 'Fatima Soleman',  'komoditas' => 'Cengkeh', 'tanggal' => '2025-02-20', 'hasil' => 190,  'harga' => 87000, 'biaya' => 750000,  'catatan' => 'Harga bagus'],
+            ['petani' => 'Fatima Soleman',  'komoditas' => 'Kelapa',  'tanggal' => '2025-05-25', 'hasil' => 550,  'harga' => 3700,  'biaya' => 480000,  'catatan' => null],
+            ['petani' => 'Fatima Soleman',  'komoditas' => 'Pala',    'tanggal' => '2025-09-14', 'hasil' => 260,  'harga' => 51000, 'biaya' => 650000,  'catatan' => null],
+
+            // Ruslan Hamid - Kelapa & Pala
+            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Kelapa',  'tanggal' => '2025-03-05', 'hasil' => 450,  'harga' => 3500,  'biaya' => 480000,  'catatan' => null],
+            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Pala',    'tanggal' => '2025-06-30', 'hasil' => 310,  'harga' => 53000, 'biaya' => 700000,  'catatan' => 'Panen bagus'],
+            ['petani' => 'Ruslan Hamid',    'komoditas' => 'Cengkeh', 'tanggal' => '2025-10-15', 'hasil' => 210,  'harga' => 88000, 'biaya' => 820000,  'catatan' => null],
+
+            // Halima Usman - Kelapa & Cengkeh
+            ['petani' => 'Halima Usman',    'komoditas' => 'Kelapa',  'tanggal' => '2025-01-15', 'hasil' => 490,  'harga' => 3500,  'biaya' => 470000,  'catatan' => null],
+            ['petani' => 'Halima Usman',    'komoditas' => 'Cengkeh', 'tanggal' => '2025-04-20', 'hasil' => 185,  'harga' => 86000, 'biaya' => 760000,  'catatan' => 'Permintaan tinggi'],
+            ['petani' => 'Halima Usman',    'komoditas' => 'Pala',    'tanggal' => '2025-07-25', 'hasil' => 270,  'harga' => 52000, 'biaya' => 620000,  'catatan' => null],
+
+            // Ibrahim Saleh - Cengkeh & Kelapa
+            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Cengkeh', 'tanggal' => '2025-02-28', 'hasil' => 250,  'harga' => 87000, 'biaya' => 850000,  'catatan' => null],
+            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Kelapa',  'tanggal' => '2025-05-18', 'hasil' => 520,  'harga' => 3600,  'biaya' => 510000,  'catatan' => null],
+            ['petani' => 'Ibrahim Saleh',   'komoditas' => 'Pala',    'tanggal' => '2025-08-22', 'hasil' => 295,  'harga' => 54000, 'biaya' => 680000,  'catatan' => 'Kualitas baik'],
+
+            // Nurhayati Malik - Pala & Cengkeh
+            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Pala',    'tanggal' => '2025-03-10', 'hasil' => 280,  'harga' => 51000, 'biaya' => 680000,  'catatan' => null],
+            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Cengkeh', 'tanggal' => '2025-06-05', 'hasil' => 165,  'harga' => 89000, 'biaya' => 720000,  'catatan' => null],
+            ['petani' => 'Nurhayati Malik', 'komoditas' => 'Kelapa',  'tanggal' => '2025-09-20', 'hasil' => 460,  'harga' => 3700,  'biaya' => 460000,  'catatan' => 'Panen melimpah'],
         ];
 
         foreach ($produksiData as $p) {

@@ -37,11 +37,11 @@ class PetaniResource extends Resource
                         ->required()
                         ->maxLength(255),
 
-                        Forms\Components\TextInput::make('no_hp')
-                            ->label('No. HP')
-                            ->tel()
-                            ->required()
-                            ->maxLength(15),
+                    Forms\Components\TextInput::make('no_hp')
+                        ->label('No. HP')
+                        ->tel()
+                        ->required()
+                        ->maxLength(15),
 
                     Forms\Components\Textarea::make('alamat')
                         ->label('Alamat')
@@ -77,8 +77,8 @@ class PetaniResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
+                    ->label('No')
+                    ->rowIndex(),
 
                 Tables\Columns\TextColumn::make('nama')
                     ->label('Nama Petani')
@@ -113,6 +113,7 @@ class PetaniResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    
                 ]),
             ]);
     }

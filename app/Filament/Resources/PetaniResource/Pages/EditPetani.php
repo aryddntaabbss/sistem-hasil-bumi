@@ -4,10 +4,14 @@ namespace App\Filament\Resources\PetaniResource\Pages;
 
 use App\Filament\Resources\PetaniResource;
 use Filament\Resources\Pages\EditRecord;
+
+use App\Filament\Traits\HasIndonesianFormActions;
 use Illuminate\Support\Facades\Hash;
 
 class EditPetani extends EditRecord
 {
+    use HasIndonesianFormActions;
+    
     protected static string $resource = PetaniResource::class;
 
     protected function mutateFormDataBeforeFill(array $data): array

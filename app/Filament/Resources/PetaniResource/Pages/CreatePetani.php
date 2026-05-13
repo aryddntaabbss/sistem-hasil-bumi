@@ -4,11 +4,14 @@ namespace App\Filament\Resources\PetaniResource\Pages;
 
 use App\Filament\Resources\PetaniResource;
 use App\Models\User;
+use App\Filament\Traits\HasIndonesianFormActions;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 
 class CreatePetani extends CreateRecord
 {
+    use HasIndonesianFormActions;
+
     protected static string $resource = PetaniResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
