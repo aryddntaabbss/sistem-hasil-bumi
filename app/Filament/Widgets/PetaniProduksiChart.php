@@ -2,27 +2,31 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Petani;
 use App\Models\Produksi;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Facades\Auth;
 
-class ProduksiChart extends ChartWidget
+class PetaniProduksiChart extends ChartWidget
 {
-    protected static ?string $heading = 'Grafik Produksi per Bulan';
-    protected static ?int $sort = 2;
+    protected static ?string $heading = 'Grafik Produksi Saya per Bulan';
+    protected static ?int $sort = 3;
 
-    // Filter tahun — default tahun data terbaru
     public ?string $filter = null;
 
     public static function canView(): bool
     {
-        return Auth::check() && Auth::user()->role === 'admin';
+        return Auth::check() && Auth::user()->role === 'petani';
     }
 
     protected function getFilters(): ?array
     {
-        // Ambil tahun yang ada di database secara dinamis
-        $tahuns = Produksi::selectRaw('YEAR(tanggal_panen) as tahun')
+        $petani = Petani::where('user_id', Auth::id())->first();
+
+        if (!$petani) return [];
+
+        $tahuns = Produksi::where('petani_id', $petani->id)
+            ->selectRaw('YEAR(tanggal_panen) as tahun')
             ->groupBy('tahun')
             ->orderByDesc('tahun')
             ->pluck('tahun')
@@ -33,7 +37,6 @@ class ProduksiChart extends ChartWidget
             $options[(string) $tahun] = (string) $tahun;
         }
 
-        // Set default ke tahun pertama (terbaru)
         if (is_null($this->filter) && !empty($tahuns)) {
             $this->filter = (string) $tahuns[0];
         }
@@ -43,9 +46,18 @@ class ProduksiChart extends ChartWidget
 
     protected function getData(): array
     {
-        $tahun = $this->filter ?? now()->year;
+        $petani = Petani::where('user_id', Auth::id())->first();
+        $tahun  = $this->filter ?? now()->year;
 
-        $data = Produksi::selectRaw('MONTH(tanggal_panen) as bulan, SUM(hasil_panen_kg) as total')
+        if (!$petani) {
+            return [
+                'datasets' => [['label' => 'Tidak ada data', 'data' => array_fill(0, 12, 0)]],
+                'labels'   => ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+            ];
+        }
+
+        $data = Produksi::where('petani_id', $petani->id)
+            ->selectRaw('MONTH(tanggal_panen) as bulan, SUM(hasil_panen_kg) as total')
             ->whereYear('tanggal_panen', $tahun)
             ->groupBy('bulan')
             ->orderBy('bulan')
@@ -62,10 +74,10 @@ class ProduksiChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label'           => 'Hasil Panen (Kg) - ' . $tahun,
+                    'label'           => 'Hasil Panen Saya (Kg) - ' . $tahun,
                     'data'            => $values,
-                    'backgroundColor' => '#16a34a',
-                    'borderColor'     => '#16a34a',
+                    'backgroundColor' => '#2563eb',
+                    'borderColor'     => '#2563eb',
                     'borderWidth'     => 2,
                 ],
             ],

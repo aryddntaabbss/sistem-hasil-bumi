@@ -42,6 +42,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\WelcomeWidget::class, 
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\ProduksiChart::class,
+                \App\Filament\Widgets\PetaniProduksiChart::class,
                 \App\Filament\Widgets\PetaniStatsOverview::class,
             ])
             ->middleware([
