@@ -17,30 +17,36 @@ class PetaniStatsOverview extends BaseWidget
 }
 
     protected function getStats(): array
-    {
-        $petani = Petani::where('nama', Auth::user()?->name)->first();
+{
+    $petani = Petani::where('user_id', Auth::id())->first();
 
-        $query = Produksi::where('petani_id', $petani?->id);
+    $totalProduksi   = 0;
+    $totalPendapatan = 0;
+    $totalKeuntungan = 0;
 
-        $totalProduksi   = $query->count();
-        $totalPendapatan = $query->sum(DB::raw('hasil_panen_kg * harga_per_kg'));
-        $totalKeuntungan = $query->sum(DB::raw('(hasil_panen_kg * harga_per_kg) - biaya_produksi'));
-
-        return [
-            Stat::make('Total Produksi Saya', $totalProduksi)
-                ->description('Data produksi yang dicatat')
-                ->descriptionIcon('heroicon-o-clipboard-document-list')
-                ->color('info'),
-
-            Stat::make('Total Pendapatan', 'Rp ' . number_format($totalPendapatan, 0, ',', '.'))
-                ->description('Akumulasi pendapatan saya')
-                ->descriptionIcon('heroicon-o-banknotes')
-                ->color('success'),
-
-            Stat::make('Total Keuntungan', 'Rp ' . number_format($totalKeuntungan, 0, ',', '.'))
-                ->description('Akumulasi keuntungan saya')
-                ->descriptionIcon('heroicon-o-arrow-trending-up')
-                ->color('success'),
-        ];
+    if ($petani) {
+        $totalProduksi   = Produksi::where('petani_id', $petani->id)->count();
+        $totalPendapatan = Produksi::where('petani_id', $petani->id)
+                            ->sum(DB::raw('hasil_panen_kg * harga_per_kg'));
+        $totalKeuntungan = Produksi::where('petani_id', $petani->id)
+                            ->sum(DB::raw('(hasil_panen_kg * harga_per_kg) - biaya_produksi'));
     }
+
+    return [
+        Stat::make('Total Produksi Saya', $totalProduksi)
+            ->description('Data produksi yang dicatat')
+            ->descriptionIcon('heroicon-o-clipboard-document-list')
+            ->color('info'),
+
+        Stat::make('Total Pendapatan', 'Rp ' . number_format($totalPendapatan, 0, ',', '.'))
+            ->description('Akumulasi pendapatan saya')
+            ->descriptionIcon('heroicon-o-banknotes')
+            ->color('success'),
+
+        Stat::make('Total Keuntungan', 'Rp ' . number_format($totalKeuntungan, 0, ',', '.'))
+            ->description('Akumulasi keuntungan saya')
+            ->descriptionIcon('heroicon-o-arrow-trending-up')
+            ->color('success'),
+    ];
+}
 }

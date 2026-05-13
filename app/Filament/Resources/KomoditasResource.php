@@ -21,26 +21,29 @@ class KomoditasResource extends Resource
     protected static ?int $navigationSort = 2;
 
     public static function canAccess(): bool
-{
-    return Auth::check() && Auth::user()->role === 'admin';
-}
+    {
+        return Auth::check() && Auth::user()->role === 'admin';
+    }
 
     public static function form(Form $form): Form
     {
         return $form->schema([
-            Forms\Components\TextInput::make('nama_komoditas')
-                ->label('Nama Komoditas')
-                ->required()
-                ->maxLength(255),
+            Forms\Components\Section::make('Data Komoditas')
+                ->schema([
+                    Forms\Components\TextInput::make('nama_komoditas')
+                        ->label('Nama Komoditas')
+                        ->required()
+                        ->maxLength(255),
 
-            Forms\Components\Select::make('jenis')
-                ->label('Jenis')
-                ->options([
-                    'Pertanian'  => 'Pertanian',
-                    'Perkebunan' => 'Perkebunan',
-                    'Hortikultura' => 'Hortikultura',
-                ])
-                ->required(),
+                    Forms\Components\Select::make('jenis')
+                        ->label('Jenis')
+                        ->options([
+                            'Pertanian'    => 'Pertanian',
+                            'Perkebunan'   => 'Perkebunan',
+                            'Hortikultura' => 'Hortikultura',
+                        ])
+                        ->required(),
+                ])->columns(2),
         ]);
     }
 
@@ -48,6 +51,10 @@ class KomoditasResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+                    
                 Tables\Columns\TextColumn::make('nama_komoditas')
                     ->label('Nama Komoditas')
                     ->searchable()

@@ -36,6 +36,9 @@ class LaporanResource extends Resource
         return $table
             ->query(Produksi::with(['petani', 'komoditas']))
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('petani.nama')
                     ->label('Petani')
                     ->searchable()

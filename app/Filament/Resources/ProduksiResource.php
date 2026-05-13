@@ -25,32 +25,45 @@ class ProduksiResource extends Resource
     protected static ?int $navigationSort = 3;
 
     public static function canAccess(): bool
-{
-    return Auth::check() && in_array(Auth::user()->role, ['admin', 'petani']);
-}
-
-public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
-{
-    $query = parent::getEloquentQuery();
-
-    if (Auth::check() && Auth::user()->role === 'petani') {
-        $petani = \App\Models\Petani::where('nama', Auth::user()->name)->first();
-        if ($petani) {
-            $query->where('petani_id', $petani->id);
-        }
+    {
+        return Auth::check() && in_array(Auth::user()->role, ['admin', 'petani']);
     }
 
-    return $query;
-}
+    public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (Auth::check() && Auth::user()->role === 'petani') {
+            $petani = Petani::where('user_id', Auth::id())->first();
+            if ($petani) {
+                $query->where('petani_id', $petani->id);
+            } else {
+                $query->whereRaw('0 = 1');
+            }
+        }
+
+        return $query;
+    }
 
     public static function form(Form $form): Form
     {
+        // Kalau petani login, otomatis terkunci ke dirinya
+        $isPetani    = Auth::check() && Auth::user()->role === 'petani';
+        $petaniLogin = $isPetani ? Petani::where('user_id', Auth::id())->first() : null;
+
         return $form->schema([
             Forms\Components\Section::make('Informasi Produksi')
                 ->schema([
                     Forms\Components\Select::make('petani_id')
                         ->label('Petani')
-                        ->options(Petani::all()->pluck('nama', 'id'))
+                        ->options(
+                            $isPetani && $petaniLogin
+                                ? [$petaniLogin->id => $petaniLogin->nama]
+                                : Petani::all()->pluck('nama', 'id')
+                        )
+                        ->default($petaniLogin?->id)
+                        ->disabled($isPetani)
+                        ->dehydrated()
                         ->searchable()
                         ->required(),
 
@@ -74,8 +87,8 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $harga = $get('harga_per_kg') ?? 0;
-                            $biaya = $get('biaya_produksi') ?? 0;
+                            $harga      = $get('harga_per_kg') ?? 0;
+                            $biaya      = $get('biaya_produksi') ?? 0;
                             $pendapatan = $state * $harga;
                             $set('pendapatan', $pendapatan);
                             $set('keuntungan', $pendapatan - $biaya);
@@ -87,8 +100,8 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $hasil = $get('hasil_panen_kg') ?? 0;
-                            $biaya = $get('biaya_produksi') ?? 0;
+                            $hasil      = $get('hasil_panen_kg') ?? 0;
+                            $biaya      = $get('biaya_produksi') ?? 0;
                             $pendapatan = $hasil * $state;
                             $set('pendapatan', $pendapatan);
                             $set('keuntungan', $pendapatan - $biaya);
@@ -100,14 +113,15 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
                         ->required()
                         ->live()
                         ->afterStateUpdated(function (Get $get, Set $set, $state) {
-                            $hasil = $get('hasil_panen_kg') ?? 0;
-                            $harga = $get('harga_per_kg') ?? 0;
+                            $hasil      = $get('hasil_panen_kg') ?? 0;
+                            $harga      = $get('harga_per_kg') ?? 0;
                             $pendapatan = $hasil * $harga;
                             $set('keuntungan', $pendapatan - $state);
                         }),
                 ])->columns(3),
 
             Forms\Components\Section::make('Kalkulasi Otomatis')
+                ->description('Dihitung otomatis berdasarkan input di atas')
                 ->schema([
                     Forms\Components\TextInput::make('pendapatan')
                         ->label('Pendapatan (Rp)')
@@ -122,10 +136,14 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
                         ->dehydrated(),
                 ])->columns(2),
 
-            Forms\Components\Textarea::make('catatan')
-                ->label('Catatan')
-                ->rows(3)
-                ->nullable(),
+            Forms\Components\Section::make('Catatan')
+                ->schema([
+                    Forms\Components\Textarea::make('catatan')
+                        ->label('Catatan Tambahan')
+                        ->rows(3)
+                        ->nullable()
+                        ->columnSpanFull(),
+                ]),
         ]);
     }
 
@@ -133,6 +151,10 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('ID')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('petani.nama')
                     ->label('Petani')
                     ->searchable()
@@ -157,14 +179,22 @@ public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
                     ->money('IDR')
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('biaya_produksi')
+                    ->label('Biaya (Rp)')
+                    ->money('IDR')
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('pendapatan')
                     ->label('Pendapatan')
                     ->money('IDR')
+                    ->getStateUsing(fn($record) => $record->hasil_panen_kg * $record->harga_per_kg)
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('keuntungan')
                     ->label('Keuntungan')
                     ->money('IDR')
+                    ->getStateUsing(fn($record) => ($record->hasil_panen_kg * $record->harga_per_kg) - $record->biaya_produksi)
+                    ->color(fn($state) => $state >= 0 ? 'success' : 'danger')
                     ->sortable(),
             ])
             ->filters([
